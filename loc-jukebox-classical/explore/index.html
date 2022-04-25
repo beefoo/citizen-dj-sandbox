@@ -1,0 +1,197 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Citizen DJ / The National Jukebox: Classical Music</title>
+  <meta name="description" content="Citizen DJ invites the public to make music using free-to-use audio and video collections. By embedding these materials in hip hop music, listeners can discover items in the library's vast collections that they likely would never have known existed." />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  
+  <meta property="og:image" content="https://citizen-dj.labs.loc.gov/img/citizen_dj_banner.jpg" />
+  <meta name="image_src" content="https://citizen-dj.labs.loc.gov/img/citizen_dj_banner.jpg" />
+  
+
+  <script src="/js/lib/redirect.js"></script>
+  <script src="//assets.adobedtm.com/dac62e20b491e735c6b56e64c39134d8ee93f9cf/satelliteLib-6b47f831c184878d7338d4683ecf773a17973bb9.js" async></script>
+
+  
+    <link rel="stylesheet" href="/css/explore.css" />
+  
+
+  
+</head>
+<body>
+
+
+<div class="wrapper explore loc-jukebox-classical">
+
+  <header>
+  <h1><a href="/">Citizen DJ</a></h1>
+  <nav>
+    <ul>
+      <li><a href="/about/">About</a></li>
+      <li><a href="/guide/">Copyright &amp; ethics guide</a></li>
+      <li><a href="/feedback/">Feedback</a></li>
+    </ul>
+  </nav>
+</header>
+
+  
+
+
+
+
+
+
+<div class="collection-header">
+  <nav>
+    <ul>
+      <li class="selected-collection">
+        <h2>Collection:</h2>
+        <button class="tab submenu-link" aria-haspopup="true" aria-expanded="false" aria-controls="collection-select">
+          <span>The National Jukebox: Classical Music</span>
+          <span class="arrow">▼</span>
+        </button>
+        <ul id="collection-select" class="submenu">
+          
+            
+            <li><a href="/loc-edison/explore/" >Inventing Entertainment</a></li>
+            
+          
+            
+            <li><a href="/loc-variety-stage/explore/" >Variety Stage Sound Recordings and Motion Pictures</a></li>
+            
+          
+            
+            <li><a href="/loc-joe-smith/explore/" >The Joe Smith Collection</a></li>
+            
+          
+            
+            <li><a href="/loc-fma/explore/" >Free Music Archive</a></li>
+            
+          
+            
+            <li><a href="/loc-musicbox/explore/" >MusicBox Project</a></li>
+            
+          
+            
+            <li><a href="/loc-tony-schwartz/explore/" >Tony Schwartz Collection</a></li>
+            
+          
+            
+            <li><a href="/loc-american-english-dialect-recordings/explore/" >American English Dialect Recordings</a></li>
+            
+          
+            
+            <li><a href="/loc-national-screening-room/explore/" >The National Screening Room</a></li>
+            
+          
+            
+            <li><a href="/loc-jukebox-blues/explore/" >The National Jukebox: Blues</a></li>
+            
+          
+            
+            <li><a href="/loc-jukebox-jazz/explore/" >The National Jukebox: Jazz</a></li>
+            
+          
+            
+            <li><a href="/loc-jukebox-folk-songs/explore/" >The National Jukebox: Folk Music</a></li>
+            
+          
+            
+            <li><a href="/loc-jukebox-opera/explore/" >The National Jukebox: Opera</a></li>
+            
+          
+            
+            <li><a href="/loc-jukebox-musical-theater/explore/" >The National Jukebox: Musical Theater</a></li>
+            
+          
+            
+          
+            
+            <li><a href="/loc-jukebox-classical/explore/" class="active">The National Jukebox: Classical Music</a></li>
+            
+          
+            
+          
+            
+            <li><a href="/loc-jukebox-popular/explore/" >The National Jukebox: Popular Music</a></li>
+            
+          
+        </ul>
+      </li>
+      <li class="collection-links">
+        <a href="/loc-jukebox-classical/explore/" class="button active">Explore</a>
+        <a href="/loc-jukebox-classical/remix/" class="button">Remix</a>
+        <a href="/loc-jukebox-classical/use/" class="button">Browse &amp; download</a>
+      </li>
+    </ul>
+  </nav>
+</div>
+
+
+  <main>
+    <div id="app" class="app">
+      <div id="image" class="image">
+        <div id="overlay" class="overlay"></div>
+        <div id="label" class="label"></div>
+        <canvas id="filter-canvas"></canvas>
+      </div>
+      <div id="instructions" class="instructions">
+        <p id="instructions-text">
+          Loading sounds... (<span id="loading-percent">0</span>%)<br />
+          <small>This may take some time for slower internet connections</small>
+        </p>
+      </div>
+      <div id="touch" class="touch"></div>
+    </div>
+  </main>
+
+  <div class="item-info">
+    <div id="filters" class="filters">
+      <button class="button inverted toggle-filters">Filters</button>
+      <div class="filters-controls">
+        <label for="select-subject">Subject</label>
+        <select id="select-subject" class="filter-select"></select>
+        <label for="select-note">Musical note</label>
+        <select id="select-note" class="filter-select"></select>
+        <label for="range-pitch-min">Minimum pitch</label>
+        <div class="range-wrapper">
+          <input id="range-pitch-min" type="range" min="0" max="100" value="0" step="0.1" class="slider" data-value="#range-pitch-min-text" /> <span id="range-pitch-min-text" class="value-text">0</span>
+        </div>
+        <div class="range-wrapper">
+          <label for="range-pitch-max">Maximum pitch</label>
+          <input id="range-pitch-max" type="range" min="0" max="100" value="100" step="0.1" class="slider" data-value="#range-pitch-max-text" /> <span id="range-pitch-max-text" class="value-text">100</span>
+        </div>
+        <button class="button clear-filters">Clear filters</button>
+      </div>
+    </div>
+    <div id="item-info" role="region" aria-live="polite"></div>
+  </div>
+
+</div>
+
+<script src="/js/vendor/jquery-3.4.1.min.js"></script>
+<script src="/js/vendor/underscore-1.9.1.min.js"></script>
+<script src="/js/vendor/hammer-2.0.8.min.js"></script>
+<script src="/js/vendor/howler.js-2.1.2.min.js"></script>
+<script src="/js/lib/player.js"></script>
+<script src="/js/lib/util.js"></script>
+<script>
+var CONFIG = {
+  'baseUrl': '',
+  'assetUrl': 'https://s3.amazonaws.com/citizen-dj-assets.labs.loc.gov',
+  'uid': 'loc-jukebox-classical',
+  'provider': 'loc.gov',
+  'localItems': ''
+};
+</script>
+<script src="/js/ui.js"></script>
+<script src="/js/explore.js"></script>
+
+<!-- <script src="/js/lib/preview.js"></script> -->
+<!-- <script src="//cdn.loop11.com/embed.js" type="text/javascript" async="async"></script> -->
+
+</body>
+</html>
+

@@ -1,0 +1,10 @@
+{
+  "name": "citizen-dj-sandbox",
+  "description": "Fork of Citizen DJ for experimentation",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "devDependencies": {
+    "express": "^4.17.2"
+  }
+}
