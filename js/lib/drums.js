@@ -157,17 +157,20 @@ var Drums = (function() {
     var drum = this.drums[this.drumIndex];
 
     var tracks = {};
+    var maxTracks = 4;
+    var trackCount = 0;
     _.each(pattern.pattern, function(instruments, col){
       _.each(instruments, function(instrument, instrumentIndex){
         // instrument already exists, just add to pattern
         if (_.has(tracks, instrument)) {
           tracks[instrument].pattern[col] = 1;
         // otherwise init track
-        } else {
+        } else if (trackCount < maxTracks) {
           var newTrack = _this.instrumentToTrack(instrument);
           if (newTrack !== false) {
             newTrack.pattern[col] = 1;
             tracks[instrument] = newTrack;
+            trackCount += 1;
           }
         }
       });
