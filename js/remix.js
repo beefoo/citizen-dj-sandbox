@@ -86,6 +86,8 @@ var RemixApp = (function() {
       }
     }
 
+    this.midi = new MIDIControl();
+
   };
 
   RemixApp.prototype.loadRecorder = function(){
