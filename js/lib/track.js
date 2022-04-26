@@ -21,7 +21,8 @@ var Track = (function() {
       "trackType": "collection",
       "recordingStreamDestination": false,
       "clipImageUrl": "",
-      "phraseDownloadUrl": ""
+      "phraseDownloadUrl": "",
+      "destination": false
     };
     this.opt = _.extend({}, defaults, config);
     this.init();
@@ -163,7 +164,8 @@ var Track = (function() {
     });
 
     if (this.recordingStreamDestination !== false) this.player.connect(this.recordingStreamDestination);
-    this.player.toMaster();
+    if (this.opt.destination !== false) this.player.connect(this.opt.destination);
+    else this.player.toMaster();
     this.onPlayerLoad();
     // }).chain(this.pitchShift, this.reverb, Tone.Master);
   };

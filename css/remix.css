@@ -1404,3 +1404,7 @@ select.select-drum {
   .modifiers button .svg-icon {
     width: 24px;
     height: 24px; } }
+
+.sequence-controls-nav ul.controls li:nth-child(n+4) {
+  display: none;
+}

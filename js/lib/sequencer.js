@@ -8,10 +8,12 @@ var Sequencer = (function() {
       'tracks': {},
       'subdivision': 16,
       'bpm': 90,
+      'pitchShift': 0,
       'swing': 0.5, // between -0.5 and 0.5
       'onChange': function(){},
       'recordingStreamDestination': false,
-      'recorder': false
+      'recorder': false,
+      'destination': false
     };
     this.defaultBPM = defaults.bpm;
     var globalConfig = typeof CONFIG !== 'undefined' ? CONFIG : {};
@@ -53,6 +55,7 @@ var Sequencer = (function() {
 
     // set bpm
     this.setBPM(this.opt.bpm);
+    this.setPitchShift(this.opt.pitchShift);
   };
 
   Sequencer.prototype.addTrack = function(id, track, type, retainEdits){
@@ -64,6 +67,7 @@ var Sequencer = (function() {
     track.settingsTemplate = this.settingsTemplate;
     track.$settingsParent = this.$settings;
     track.recordingStreamDestination = this.opt.recordingStreamDestination;
+    track.destination = this.opt.destination;
     type = type || track.trackType;
 
     if (!_.has(this.trackIds, type)) this.trackIds[type] = [];
@@ -223,6 +227,13 @@ var Sequencer = (function() {
       });
     }
 
+    // shift pitch
+    if (this.$pitchInput.length) {
+      this.$pitchInput.on('input', function(e){
+        _this.setPitchShift(parseFloat($(this).val()), true);
+      });
+    }
+
     // update pattern
     this.$tracks.on('change', '.beat input', function(e){
       _this.onChangeBeat($(this), true);
@@ -275,6 +286,11 @@ var Sequencer = (function() {
     // track on settings input
     $('body').on('input', '.track-input', function(e){
       _this.onChangeTrackSettings($(this));
+    });
+
+    // track on settings input
+    $(document).on('track-volume', function(e, trackIndex, value) {
+      _this.onTrackVolumeUpdate(trackIndex, value);
     });
   };
 
@@ -357,10 +373,16 @@ var Sequencer = (function() {
     });
   };
 
+  Sequencer.prototype.onTrackVolumeUpdate = function(trackIndex, value) {
+    var gain = MathUtil.lerp(-16, 10, value);
+  };
+
   Sequencer.prototype.loadUI = function(){
     this.$toggleButton = this.$el.find('.toggle-play');
     this.$bpmInput = this.$el.find('.bpm-input');
+    this.$pitchInput = this.$el.find('.pitch-input');
     this.$bpmText = this.$el.find('.bpm-text');
+    this.$pitchText = this.$el.find('.pitch-text');
     this.$settings = $('#modal-track-settings');
 
     // init templates
@@ -527,10 +549,22 @@ var Sequencer = (function() {
     if (fromUser) this.opt.onChange();
   };
 
+  Sequencer.prototype.setPitchShift = function(pitchShift, fromUser){
+    pitchShift = parseFloat(''+pitchShift);
+    this.$pitchText.text(pitchShift);
+    if (!fromUser) this.$pitchInput.val(pitchShift);
+    this.pitchShift = pitchShift;
+    this.opt.destination.pitch = pitchShift;
+    if (fromUser) this.opt.onChange();
+  };
+
   Sequencer.prototype.start = function(){
     if (Tone.context.state !== 'running') Tone.context.resume();
     Tone.Transport.start();
     this.$toggleButton.text('Stop');
+    // _.each(this.tracks, function(track){
+    //   console.log(track.opt.title, track.trackType, track.$el.index());
+    // });
   };
 
   Sequencer.prototype.stop = function(){
@@ -566,6 +600,10 @@ var Sequencer = (function() {
     // return bpm if not default
     if (this.bpm !== this.defaultBPM) {
       data.bpm = this.bpm;
+    }
+
+    if (this.pitchShift !== 0) {
+      data.pitchShift = this.pitchShift;
     }
 
     return data;

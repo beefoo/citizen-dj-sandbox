@@ -15,7 +15,8 @@ var RemixApp = (function() {
         "gainEdits": "g",
         "clipStartEdits": "t",
         "clipDurEdits": "r",
-        "addDrumTracks": "a"
+        "addDrumTracks": "a",
+        "pitchShift": "f"
       }
     };
     this.opt = _.extend({}, defaults, config);
@@ -104,14 +105,15 @@ var RemixApp = (function() {
 
     // delay the change trigger so we're not constantly updating URL with a new bpm
     var onChange = _.debounce(function(){ _this.updateURL(true); }, 1000);
-
+    this.pitchShift = new Tone.PitchShift(this.opt.pitchShift).toMaster();
     this.sequencer = new Sequencer({
       "el": _this.opt.el,
       "urlVarMap": _this.opt.urlVarMap,
       "tracks": tracks,
       "onChange": onChange,
       "recordingStreamDestination": this.recordingStreamDestination,
-      "recorder": this.recorder
+      "recorder": this.recorder,
+      "destination": this.pitchShift
     });
   };
 
