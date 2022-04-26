@@ -284,6 +284,13 @@ var Track = (function() {
 
   Track.prototype.setGain = function(db){
     this.player.volume.value = db;
+
+    var defaultGain = -3;
+    var minGain = -16;
+    var t = MathUtil.ease(MathUtil.norm(db, minGain, defaultGain));
+    if (t < 0) t = 0;
+    var opacity = MathUtil.lerp(0.1, 1, t);
+    this.$el.css('opacity', opacity);
   };
 
   Track.prototype.setPitchShift = function(pitch){

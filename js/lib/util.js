@@ -396,6 +396,7 @@ var MIDIControl = (function() {
     // pitch
     } else if (midiNum === 17) {
       var newPitch = (1.0*this.pitchMax  - this.pitchMin) * value + this.pitchMin;
+      if (Math.abs(newPitch) < 0.2) newPitch = 0;
       this.$pitch.val(newPitch).trigger('input');
       str += ' [pitch]';
 

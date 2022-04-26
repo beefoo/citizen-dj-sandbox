@@ -39,7 +39,7 @@ var Sequencer = (function() {
     // init tracks
     this.players = {}; // by url
     this.tracks = {};
-    this.trackIds = [];
+    this.trackIds = {};
     this.$tracks = this.$el.find('.sequence').first();
 
     var playerPromises = this.loadPlayers(this.opt.tracks);
@@ -374,7 +374,17 @@ var Sequencer = (function() {
   };
 
   Sequencer.prototype.onTrackVolumeUpdate = function(trackIndex, value) {
-    var gain = MathUtil.lerp(-16, 10, value);
+    var collectionTrackIds = this.trackIds.collection;
+    var drumTrackIds = this.trackIds.drum;
+    var trackId = false;
+    if (trackIndex < collectionTrackIds.length) trackId = collectionTrackIds[trackIndex];
+    else if (trackIndex < (collectionTrackIds.length + drumTrackIds.length)) trackId = drumTrackIds[trackIndex - collectionTrackIds.length];
+    if (trackId === false) return;
+
+    var gain = MathUtil.lerp(-16, -3, MathUtil.ease(value));
+    if (value <= 0) gain = -36;
+    var track = this.tracks[trackId];
+    track.updateSetting('gain', gain);
   };
 
   Sequencer.prototype.loadUI = function(){
@@ -474,6 +484,7 @@ var Sequencer = (function() {
   };
 
   Sequencer.prototype.onTrackUpdateLoaded = function(){
+    // console.log('Track IDs', this.trackIds);
     if (!this.playing) return;
     Tone.Transport.pause();
     setTimeout(function(){
