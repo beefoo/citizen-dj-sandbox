@@ -381,7 +381,9 @@ var Sequencer = (function() {
     else if (trackIndex < (collectionTrackIds.length + drumTrackIds.length)) trackId = drumTrackIds[trackIndex - collectionTrackIds.length];
     if (trackId === false) return;
 
-    var gain = MathUtil.lerp(-16, -3, MathUtil.ease(value));
+    var maxGain = -3;
+    if (trackIndex >= collectionTrackIds.length) maxGain = -12
+    var gain = MathUtil.lerp(-16, maxGain, MathUtil.ease(value));
     if (value <= 0) gain = -36;
     var track = this.tracks[trackId];
     track.updateSetting('gain', gain);

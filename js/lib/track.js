@@ -22,7 +22,9 @@ var Track = (function() {
       "recordingStreamDestination": false,
       "clipImageUrl": "",
       "phraseDownloadUrl": "",
-      "destination": false
+      "destination": false,
+      "defaultGain": -3,
+      "minGain": -16
     };
     this.opt = _.extend({}, defaults, config);
     this.init();
@@ -188,6 +190,8 @@ var Track = (function() {
     this.$settingsParent = this.opt.$settingsParent;
     this.$settingsDialog = this.$settingsParent.find('.dialog');
 
+    this.setOpacityFromGain(this.opt.gain);
+
     if (this.isMuted) this.mute();
   };
 
@@ -285,13 +289,17 @@ var Track = (function() {
   Track.prototype.setGain = function(db){
     this.player.volume.value = db;
 
-    var defaultGain = -3;
-    var minGain = -16;
+    this.setOpacityFromGain(db);
+  };
+
+  Track.prototype.setOpacityFromGain = function(db) {
+    var defaultGain = this.opt.trackType == 'collection' ? -3 : -12;
+    var minGain = this.opt.minGain;
     var t = MathUtil.ease(MathUtil.norm(db, minGain, defaultGain));
-    if (t < 0) t = 0;
+    if (t < 0 || db < minGain) t = 0;
     var opacity = MathUtil.lerp(0.1, 1, t);
     this.$el.css('opacity', opacity);
-  };
+  }
 
   Track.prototype.setPitchShift = function(pitch){
     if (this.pitchShift) this.pitchShift.pitch = pitch;

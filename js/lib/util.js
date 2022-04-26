@@ -334,7 +334,8 @@ var MIDIControl = (function() {
     this.$nextCollection = $('.next-collection').first();
     this.$prevDrum = $('.prev-drum').first();
     this.$nextDrum = $('.next-drum').first();
-
+    this.$drumRandomize = $('.randomize-drum').first();
+    this.$selectDrumMachine = $('#select-drum');
   };
 
   MIDIControl.prototype.onMIDIMessage = function(event){
@@ -382,10 +383,27 @@ var MIDIControl = (function() {
       this.$nextDrum.trigger('click');
       str += ' [forward]';
 
-    // cycle / shuffle
+    // cycle
     } else if (midiNum === 46 && value >= 1.0) {
       this.$randomize.trigger('click');
       str += ' [cycle]';
+
+    // set marker
+    } else if (midiNum === 60 && value >= 1.0) {
+      this.$drumRandomize.trigger('click');
+      str += ' [set marker]';
+
+    // left marker
+    } else if (midiNum === 61 && value >= 1.0) {
+      this.$selectDrumMachine.find('option:selected').prop("selected", false).prev().prop("selected", true);
+      this.$selectDrumMachine.trigger('change');
+      str += ' [left marker]';
+
+    // right marker
+    } else if (midiNum === 62 && value >= 1.0) {
+      this.$selectDrumMachine.find('option:selected').prop("selected", false).next().prop("selected", true);
+      this.$selectDrumMachine.trigger('change');
+      str += ' [right marker]';
 
     // tempo
     } else if (midiNum === 16) {
@@ -431,7 +449,7 @@ var MIDIControl = (function() {
       str += ' [track reverse '+track+']';
     }
 
-    console.log(str);
+    // console.log(str);
     // this.el.textContent = str;
 
   };
